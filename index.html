@@ -3,14 +3,24 @@
       <title>Vue Example</title>
       <meta charset="utf-8">
       <style>
+        .outer{border: 1px solid #ccc; width:500px; margin: 50px auto 0 auto;}
       </style>
    </head>
    <body>
+      <div id='linkgame' class='outer'>
+        <svg xmlns="http://www.w3.org/2000/svg" width='500' height='500'>
+          <rect x='0' y='0' width='500' height='500' fill='#eee'></rect>
+         <!--  <image x="0" y="0" width="30" height="30" xlink:href="./img/1.jpg" />
+          <image x="35" y="0" width="30" height="30" xlink:href="./img/1.jpg" />
+          <image x="70" y="0" width="30" height="30" xlink:href="./img/2.jpg" />
+          <image x="105" y="0" width="30" height="30" xlink:href="./img/3.jpg" /> -->
+          <image v-on:click='hello' v-for='pic in pics' :width='pic.width' :height='pic.height' :x='pic.x' :y='pic.y' v-bind:xlink:href='pic.url'></image>
+        </svg>
+      </div>
+      
       <script src='./lib/vue.js' type="text/javascript"></script>
+      <script src='./lib/jquery-3.2.1.js' type="text/javascript"></script>
       <script src='./search.js' type="text/javascript"></script>
-      <script type="text/javascript">
-        
-      </script>
-
+      <script src='./index.js' type="text/javascript"></script>
    </body>
 </html>
