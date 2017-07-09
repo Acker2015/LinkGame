@@ -1,16 +1,16 @@
-var search = (function(){
+var search = function(array, begin, end){
 	/*
 	6 * 6
 	*/
-	var array = [
-		[-1, -1, -1, -1, -1, -1, -1],
-		[-1, -1, -1,  3,  1,  0, -1],
-		[-1, -1,  7, -1,  9, 10, -1],
-		[-1, -1,  2, -1,  9, 11, -1],
-		[-1, -1,  3, -1,  6,  7, -1],
-		[-1,  8, 10, 11, 12, 12, -1],
-		[-1, -1, -1, -1, -1, -1, -1],
-	]
+	// var array = [
+	// 	[-1, -1, -1, -1, -1, -1, -1],
+	// 	[-1, -1, -1,  3,  1,  0, -1],
+	// 	[-1, -1,  7, -1,  9, 10, -1],
+	// 	[-1, -1,  2, -1,  9, 11, -1],
+	// 	[-1, -1,  3, -1,  6,  7, -1],
+	// 	[-1,  8, 10, 11, 12, 12, -1],
+	// 	[-1, -1, -1, -1, -1, -1, -1],
+	// ]
 	var len = array.length;
 	var big_corner = 100;
 	var big_distance = 10000;
@@ -91,7 +91,7 @@ var search = (function(){
 		return find(begin, end, help_map, times + 1);
 	}
 	// x: 1-> len - 2 ,  y: 1 -> len - 2  have picture.
-	function search(begin, end, map){
+	function sub_search(begin, end, map){
 		if(begin == null || end == null) return false;
 		if(map[begin.x][begin.y] != map[end.x][end.y]) return false;
 		if(begin.x === end.x && begin.y === end.y) return true;
@@ -109,7 +109,6 @@ var search = (function(){
 		}
 		return path;
 	}
-
-	var begin = {x: 1, y: 3}, end = {x: 4, y: 2};
-	return search;
-})();
+	//var begin = {x: 1, y: 3}, end = {x: 4, y: 2};
+	return sub_search(begin, end, array);
+};
