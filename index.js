@@ -127,7 +127,7 @@
 	        				parent.removeChild(s2);
 	        				this.path = '';
 	        				if(this.check()){
-	        					alert('恭喜!');
+	        					alert('Congratulations!');
 	        				}
 	        			}).bind(this), 500)
 	        		}
@@ -150,4 +150,4 @@
 	      }
 	    }
 	 });
-})(10);
+})(25);

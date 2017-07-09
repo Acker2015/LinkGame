@@ -81,7 +81,7 @@ var search = function(array, begin, end){
 		return sub_re;
 	}
 	function find(begin, end, help_map, times){
-		if(times > 2) return false;
+		if(times >= 2) return false;
 		var len = help_map.length;
 		var sub_re = collect(help_map, times);
 		sub_re.forEach((d, i)=>{
