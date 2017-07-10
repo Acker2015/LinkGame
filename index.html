@@ -9,9 +9,9 @@
       </style>
    </head>
    <body>
-      <div class='header'>
+      <div id='header' class='header'>
         <p>First Level</p>
-        <button>Start</button>
+        <button v-on:click='start'>Start</button>
         <button>Disorganize</button>
       </div>
       <div id='linkgame' class='outer' :style='{width:space.width + "px", height: space.height+"px"}'>

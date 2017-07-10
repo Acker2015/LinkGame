@@ -15,26 +15,32 @@
 		}
 	};
 	function cal_data(){
-		var pic_array = [], id, sub_x, sub_y;
+		var pic_array = [], id, sub_x, sub_y, tmp;
 		var pic_array_len = map_width_height * map_width_height;
 		var all_row_columns = [];
 		for (var i = 1; i <= map_width_height; i++) 
 			for(var j = 1; j <= map_width_height; j++)
 				all_row_columns.push({x:i, y:j});
-		var has_selected = [], not_selected = all_row_columns;
-		for (var i = 0; i < pic_array_len; i++) {
-			id = i % (pic_len) + 1;
-			//start for(1, 1);
-			//11->(1, 1)->(2, 2)
-			sub_x = parseInt(i / map_width_height);
-			sub_y = i % map_width_height;
-			sub_x++; sub_y++;
-			MAP[sub_x][sub_y] = id;
+		all_row_columns = _.shuffle(all_row_columns);
+		for (var i = 0; i < all_row_columns.length; i+=2) {
+			id = parseInt(1 + Math.random() * (pic_len - 0.0001));
+			// i
+			tmp = all_row_columns[i];
+			MAP[tmp.x][tmp.y] = id;
 			pic_array.push({
 				id: id, 
 				src: pre_src + id + '.jpg', 
-				pos: {x: sub_x, y: sub_y},
-				space: find(sub_x, sub_y)
+				pos: {x: tmp.x, y: tmp.y},
+				space: find(tmp.x, tmp.y)
+			});
+			//i + 1
+			tmp = all_row_columns[i + 1];
+			MAP[tmp.x][tmp.y] = id;
+			pic_array.push({
+				id: id, 
+				src: pre_src + id + '.jpg', 
+				pos: {x: tmp.x, y: tmp.y},
+				space: find(tmp.x, tmp.y)
 			});
 		};
 		return pic_array;
@@ -45,21 +51,17 @@
 		};
 		return -1;
 	}
+	//---------------------------------------------------------
+	/**
+	 * 拉斯维加斯算法和回溯法创建有效棋盘
+	 * 
+	 */
 	function init_map_layout(sub_map, distributed_num, pic_index){
 		if(sub_map.length == distributed_num) return true;
 		var id = (pic_index % pic_len) + 1;
 		var last = sub_map[fetch_first_undistribute(sub_map)];
 		last.distribute = true;
 		MAP[last.x][last.y] = id;
-		// if(distributed_num + 2 == sub_map.length){
-		// 	var index_one = fetch_first_undistribute(sub_map);
-		// 	sub_map[index_one].distribute = true;
-		// 	var index_two = fetch_first_undistribute(sub_map);
-		// 	sub_map[index_two].distribute = true;
-		// 	MAP[sub_map[index_one].x][sub_map[index_one].y] = pic_index;
-		// 	MAP[sub_map[index_two].x][sub_map[index_two].y] = pic_index;
-		// 	return true;
-		// }
 		for(var i = 0; i < sub_map.length; ++i){
 			var tmp = sub_map[i];
 			if(tmp.distribute) continue;
@@ -95,7 +97,7 @@
 		console.log(MAP);
 		
 	}
-	//generate_map();
+	//---------------------------------------------------------
 
 	/**
 	 * Calculate pixel width and height of the game window.
@@ -143,7 +145,7 @@
 	var vm = new Vue({
 	    el: '#linkgame',
 	    data: {
-	      pics: cal_data(),
+	      pics: [],
 	      space: cal_squ(map_width_height),
 	      path: '',
 	      select_one: undefined,
@@ -205,5 +207,16 @@
 	      	return flag;
 	      }
 	    }
-	 });
+	});
+
+	var control = new Vue({
+		el: '#header',
+		methods: {
+			start: function(){
+				vm.pics = cal_data();
+				console.log('start');
+			},
+			
+		}
+	});
 })(10);
