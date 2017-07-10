@@ -216,7 +216,42 @@
 				vm.pics = cal_data();
 				console.log('start');
 			},
-			
+			deep_clone: function(arg){
+				if(Array.isArray(arg)){
+					var sub_arr = [];
+					for (var i = 0; i < arg.length; i++) {
+						sub_arr.push(this.deep_clone(arg[i]));
+					};
+					return sub_arr;
+				}else if(Object.prototype.toString.call(arg) === "[object Object]"){
+					var sub_obj = {};
+					for(var k in arg){
+						sub_obj[k] = deep_clone(arg[k]);
+					}
+					return sub_obj;
+				}else{
+					return arg;
+				}
+			},	
+			confused: function(){
+				var new_pics = vm.pics.map((d, i) => {
+					var tmp = {};
+					tmp.id = d.id;
+					tmp.pos = d.pos;
+					tmp.space = d.space;
+					tmp.src = d.src;
+					return tmp;
+				});
+				debugger;
+				var pos_set = new_pics.map((d, i) => d.pos);
+				pos_set = _.shuffle(pos_set);
+				var new_arr = [];
+				new_pics.forEach((d, i) => {
+					d.pos = pos_set[i];
+					new_arr.push(Object.assign({}, d));
+				});
+			}
+
 		}
 	});
 })(10);
