@@ -14,6 +14,21 @@
 			MAP[i][j] = -1;
 		}
 	};
+	function init_MAP(){
+		for (var i = 0; i < MAP.length; i++) {
+			var map = MAP[i];
+			for(var j = 0; j < map.length; ++j){
+				MAP[i][j] = -1;
+			}
+		};
+	}
+	function set_MAP(arr){
+		init_MAP();
+		for (var i = 0; i < arr.length; i++) {
+			var pos = arr[i].pos;
+			MAP[pos.x][pos.y] = arr[i].id;
+		};
+	}
 	function cal_data(){
 		var pic_array = [], id, sub_x, sub_y, tmp;
 		var pic_array_len = map_width_height * map_width_height;
@@ -92,7 +107,6 @@
 			};
 		};
 		sub_map = _.shuffle(sub_map);
-		debugger;
 		var re = init_map_layout(sub_map, 0, 1);
 		console.log(MAP);
 		
@@ -152,7 +166,7 @@
 	      select_two: undefined
 	    },
 	    methods: {
-	      hello: function(event){
+	      wipe: function(event){
 	      	var target = event.target;
 	      	target.setAttribute('opacity', 0.5);
 	        if(this.select_one === undefined){
@@ -214,44 +228,40 @@
 		methods: {
 			start: function(){
 				vm.pics = cal_data();
-				console.log('start');
 			},
-			deep_clone: function(arg){
-				if(Array.isArray(arg)){
-					var sub_arr = [];
-					for (var i = 0; i < arg.length; i++) {
-						sub_arr.push(this.deep_clone(arg[i]));
-					};
-					return sub_arr;
-				}else if(Object.prototype.toString.call(arg) === "[object Object]"){
-					var sub_obj = {};
-					for(var k in arg){
-						sub_obj[k] = deep_clone(arg[k]);
-					}
-					return sub_obj;
-				}else{
-					return arg;
-				}
-			},	
 			confused: function(){
-				var new_pics = vm.pics.map((d, i) => {
+				var sub_pics = vm.pics.filter((d, i) => {
+					let pos = d.pos;
+					if(MAP[pos.x][pos.y] != -1)
+						return true;
+					else
+						return false;
+				});
+				var new_poses = sub_pics.map((d, i) => {
 					var tmp = {};
-					tmp.id = d.id;
-					tmp.pos = d.pos;
-					tmp.space = d.space;
-					tmp.src = d.src;
+					tmp.x = d.pos.x;
+					tmp.y = d.pos.y;
 					return tmp;
 				});
-				debugger;
-				var pos_set = new_pics.map((d, i) => d.pos);
-				pos_set = _.shuffle(pos_set);
-				var new_arr = [];
-				new_pics.forEach((d, i) => {
-					d.pos = pos_set[i];
-					new_arr.push(Object.assign({}, d));
+				var new_ids = sub_pics.map((d, i) => {
+					return d.id;
+				})
+				new_poses = _.shuffle(new_poses);
+				new_ids = _.shuffle(new_ids);
+				vm.pics.splice(0, vm.pics.length);
+				var new_data = new_poses.forEach((d, i) => {
+					var tmp = {};
+					tmp.id = new_ids[i];
+					tmp.src = pre_src + new_ids[i] + '.jpg';
+					tmp.space = find(d.x, d.y);
+					tmp.pos = d;
+					vm.pics.push(tmp);
 				});
+				set_MAP(vm.pics);
+				vm.select_one = undefined;
+				vm.select_two = undefined;
 			}
 
 		}
 	});
-})(10);
+})(6);
